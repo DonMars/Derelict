@@ -17,36 +17,36 @@ public class FirstPersonController : MonoBehaviour
     private bool ShouldCrouch => (Input.GetKeyDown(crouchKey) || Input.GetKeyUp(crouchKey)) && !duringCrouchAnimation && characterController.isGrounded;
 
     [Header("Functions")]
-    [SerializeField] private bool canSprint = true;
-    [SerializeField] private bool canJump = true;
-    [SerializeField] private bool canCrouch = true;
-    [SerializeField] private bool canUseHeadbob = true;
-    [SerializeField] private bool willSlideOnSlopes = true;
-    [SerializeField] private bool canZoom = true;
-    [SerializeField] private bool canInteract = true;
-    [SerializeField] private bool useFootsteps = true;
-    [SerializeField] private bool useStamina = true;
+    [SerializeField] bool canSprint = true;
+    [SerializeField] bool canJump = true;
+    [SerializeField] bool canCrouch = true;
+    [SerializeField] bool canUseHeadbob = true;
+    [SerializeField] bool willSlideOnSlopes = true;
+    [SerializeField] bool canZoom = true;
+    [SerializeField] bool canInteract = true;
+    [SerializeField] bool useFootsteps = true;
+    [SerializeField] bool useStamina = true;
 
     [Header("Controls")]
-    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
-    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
-    [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
-    [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
-    [SerializeField] private KeyCode interactKey = KeyCode.E;
+    [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] KeyCode crouchKey = KeyCode.LeftControl;
+    [SerializeField] KeyCode zoomKey = KeyCode.Mouse1;
+    [SerializeField] KeyCode interactKey = KeyCode.E;
 
     [Header("Interactions")]
-    [SerializeField] private Vector3 interactionRayPoint = default;
-    [SerializeField] private float interactionDistance = default;
-    [SerializeField] private LayerMask interactionLayer = default;
-    private Interactable currentInteractable;
+    [SerializeField] Vector3 interactionRayPoint = default;
+    [SerializeField] float interactionDistance = default;
+    [SerializeField] LayerMask interactionLayer = default;
+    Interactable currentInteractable;
 
     [Header("Health")]
-    [SerializeField] private float maxHealth = 100;
-    [SerializeField] private float timeBeforeRegen = 3;
-    [SerializeField] private float regenIncrementValue = 1;
-    [SerializeField] private float regenIncrementTime = 0.1f;
-    private float currentHealth;
-    private Coroutine regeneratingHealth;
+    [SerializeField] public float maxHealth = 100;
+    [SerializeField] float timeBeforeRegen = 3;
+    [SerializeField] float regenIncrementValue = 1;
+    [SerializeField] float regenIncrementTime = 0.1f;
+    public float currentHealth;
+    Coroutine regeneratingHealth;
     public static Action<float> OnTakeDamage;
     public static Action<float> OnDamage;
     public static Action<float> OnHeal;
@@ -61,68 +61,72 @@ public class FirstPersonController : MonoBehaviour
     }
 
     [Header("Stamina")]
-    [SerializeField] private float maxStamina = 100;
-    [SerializeField] private float staminaUseMultiplier = 5;
-    [SerializeField] private float timeBeforeStaminaRegenStarts = 5;
-    [SerializeField] private float depletedStaminaRegenTime = 10;
-    [SerializeField] private float staminaValueIncrement = 2;
-    [SerializeField] private float staminaTimeIncrement = 0.1f;
-    private float currentStamina;
-    private Coroutine regeneratingStamina;
+    [SerializeField] public float maxStamina = 100;
+    [SerializeField] float staminaUseMultiplier = 5;
+    [SerializeField] float timeBeforeStaminaRegenStarts = 5;
+    [SerializeField] float depletedStaminaRegenTime = 10;
+    [SerializeField] float staminaValueIncrement = 2;
+    [SerializeField] float staminaTimeIncrement = 0.1f;
+    public float currentStamina;
+    Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
-    private float originalStaminaRegenTime;
+    float originalStaminaRegenTime;
 
     [Header("Moving")]
-    [SerializeField] private float walkSpeed = 3.0f;
-    [SerializeField] private float sprintSpeed = 6.0f;
-    [SerializeField] private float crouchSpeed = 1.5f;
-    [SerializeField] private float slopeSpeed = 8f;
+    [SerializeField] float walkSpeed = 3.0f;
+    [SerializeField] float sprintSpeed = 6.0f;
+    [SerializeField] float crouchSpeed = 1.5f;
+    [SerializeField] float slopeSpeed = 8f;
 
     [Header("Looking")]
-    [SerializeField, Range(1, 10)] private float lookSpeedX = 2.0f;
-    [SerializeField, Range(1, 10)] private float lookSpeedY = 2.0f;
-    [SerializeField, Range(1, 90)] private float upperLookLimit = 80.0f;
-    [SerializeField, Range(1, 90)] private float lowerLookLimit = 80.0f;
+    [SerializeField, Range(1, 10)] float lookSpeedX = 2.0f;
+    [SerializeField, Range(1, 10)] float lookSpeedY = 2.0f;
+    [SerializeField, Range(1, 90)] float upperLookLimit = 80.0f;
+    [SerializeField, Range(1, 90)] float lowerLookLimit = 80.0f;
 
     [Header("Jumping")]
-    [SerializeField] private float gravity = 30.0f;
-    [SerializeField] private float jumpForce = 8.0f;
+    [SerializeField] float gravity = 30.0f;
+    [SerializeField] float jumpForce = 8.0f;
 
     [Header("Crouching")]
-    [SerializeField] private float crouchHeight = 0.65f;
-    [SerializeField] private float standingHeight = 2f;
-    [SerializeField] private float timeToCrouch = 0.25f;
-    [SerializeField] private Vector3 crouchingCenter = new Vector3(0, 0.65f, 0);
-    [SerializeField] private Vector3 standingCenter = new Vector3(0, 0, 0);
-    private bool isCrouching;
-    private bool duringCrouchAnimation;
+    [SerializeField] float crouchHeight = 0.65f;
+    [SerializeField] float standingHeight = 2f;
+    [SerializeField] float timeToCrouch = 0.25f;
+    [SerializeField] Vector3 crouchingCenter = new Vector3(0, 0.65f, 0);
+    [SerializeField] Vector3 standingCenter = new Vector3(0, 0, 0);
+    bool isCrouching;
+    bool duringCrouchAnimation;
 
     [Header("Headbob")]
-    [SerializeField] private float walkBobSpeed = 14f;
-    [SerializeField] private float walkBobAmount = 0.05f;
-    [SerializeField] private float sprintBobSpeed = 18f;
-    [SerializeField] private float sprintBobAmount = 0.11f;
-    [SerializeField] private float crouchBobSpeed = 8f;
-    [SerializeField] private float crouchBobAmount = 0.025f;
-    private float defaultYpos = 0f;
-    private float timer;
+    [SerializeField] float walkBobSpeed = 14f;
+    [SerializeField] float walkBobAmount = 0.05f;
+    [SerializeField] float sprintBobSpeed = 18f;
+    [SerializeField] float sprintBobAmount = 0.11f;
+    [SerializeField] float crouchBobSpeed = 8f;
+    [SerializeField] float crouchBobAmount = 0.025f;
+    float defaultYpos = 0f;
+    float timer;
 
     [Header("Weapon Zoom")]
-    [SerializeField] private float timeToZoom = 0.3f;
-    [SerializeField] private float zoomFOV = 45f;
-    private float defaultFOV;
-    private Coroutine zoomRoutine;
+    [SerializeField] Animator weaponAnimator;
+    [SerializeField] WeaponSway weaponSwayControl;
+    [SerializeField] float timeToZoom = 0.3f;
+    [SerializeField] float zoomFOV = 45f;
+    float defaultFOV;
+    Coroutine zoomRoutine;
+    float weaponSwayOriginalIntensity;
+    float weaponSwayOriginalSmooth;
 
     [Header("Footsteps")]
-    [SerializeField] private float baseStepSpeed = 0.5f;
-    [SerializeField] private float crouchStepMultiplier = 1.5f;
-    [SerializeField] private float sprintStepMultiplier = 0.6f;
-    [SerializeField] private AudioSource footstepAudioSource = default;
-    [SerializeField] private AudioClip[] grassClips = default;
-    [SerializeField] private AudioClip[] metalClips = default;
-    [SerializeField] private AudioClip[] woodClips = default;
-    private float footstepTimer = 0;
-    private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : IsSprinting ? baseStepSpeed * sprintStepMultiplier : baseStepSpeed;
+    [SerializeField] float baseStepSpeed = 0.5f;
+    [SerializeField] float crouchStepMultiplier = 1.5f;
+    [SerializeField] float sprintStepMultiplier = 0.6f;
+    [SerializeField] AudioSource footstepAudioSource = default;
+    [SerializeField] AudioClip[] grassClips = default;
+    [SerializeField] AudioClip[] metalClips = default;
+    [SerializeField] AudioClip[] woodClips = default;
+    float footstepTimer = 0;
+    float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : IsSprinting ? baseStepSpeed * sprintStepMultiplier : baseStepSpeed;
 
     // Sliding
     private Vector3 hitPointNormal;
@@ -142,13 +146,13 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private Camera playerCamera;
-    private CharacterController characterController;
+    Camera playerCamera;
+    CharacterController characterController;
 
-    private Vector3 moveDirection;
-    private Vector2 currentInput;
+    Vector3 moveDirection;
+    Vector2 currentInput;
 
-    private float rotationX = 0;
+    float rotationX = 0;
 
     public static FirstPersonController instance;
     #endregion
@@ -165,6 +169,9 @@ public class FirstPersonController : MonoBehaviour
         currentHealth = maxHealth;
         currentStamina = maxStamina;
         originalStaminaRegenTime = timeBeforeStaminaRegenStarts;
+
+        weaponSwayOriginalIntensity = weaponSwayControl.intensity;
+        weaponSwayOriginalSmooth = weaponSwayControl.smooth;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -304,9 +311,16 @@ public class FirstPersonController : MonoBehaviour
     {
         if(Input.GetKeyDown(zoomKey))
         {
-            if(zoomRoutine != null)
+            weaponAnimator.SetBool("isAiming", true);
+            weaponSwayControl.intensity = weaponSwayOriginalIntensity / 3;
+            weaponSwayControl.smooth = weaponSwayOriginalSmooth / 3;
+
+            if (zoomRoutine != null)
             {
                 StopCoroutine(zoomRoutine);
+                weaponAnimator.SetBool("isAiming", false);
+                weaponSwayControl.intensity = weaponSwayOriginalIntensity;
+                weaponSwayControl.smooth = weaponSwayOriginalSmooth;
                 zoomRoutine = null;
             }
 
@@ -318,8 +332,15 @@ public class FirstPersonController : MonoBehaviour
             if (zoomRoutine != null)
             {
                 StopCoroutine(zoomRoutine);
+                weaponAnimator.SetBool("isAiming", false);
+                weaponSwayControl.intensity = weaponSwayOriginalIntensity;
+                weaponSwayControl.smooth = weaponSwayOriginalSmooth;
                 zoomRoutine = null;
             }
+
+            weaponAnimator.SetBool("isAiming", false);
+            weaponSwayControl.intensity = weaponSwayOriginalIntensity;
+            weaponSwayControl.smooth = weaponSwayOriginalSmooth;
 
             zoomRoutine = StartCoroutine(ToggleZoom(false));
         }
@@ -427,7 +448,7 @@ public class FirstPersonController : MonoBehaviour
 
     private IEnumerator CrouchStand()
     {
-        if (isCrouching && Physics.Raycast(playerCamera.transform.position, Vector3.up, 1f))
+        if (isCrouching && Physics.Raycast(playerCamera.transform.position, Vector3.up, 1.2f))
             yield break;
 
         duringCrouchAnimation = true;
