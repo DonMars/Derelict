@@ -26,6 +26,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] bool canInteract = true;
     [SerializeField] bool useFootsteps = true;
     [SerializeField] bool useStamina = true;
+    [SerializeField] bool useSpotlight = true;
 
     [Header("Controls")]
     [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
@@ -33,6 +34,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] KeyCode interactKey = KeyCode.E;
+    [SerializeField] KeyCode spotlightKey = KeyCode.Q;
 
     [Header("Interactions")]
     [SerializeField] Vector3 interactionRayPoint = default;
@@ -83,6 +85,10 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField, Range(1, 10)] float lookSpeedY = 2.0f;
     [SerializeField, Range(1, 90)] float upperLookLimit = 80.0f;
     [SerializeField, Range(1, 90)] float lowerLookLimit = 80.0f;
+
+    [Header("Spotlight")]
+    [SerializeField] GameObject spotlight;
+    Light spotlightLight;
 
     [Header("Jumping")]
     [SerializeField] float gravity = 30.0f;
@@ -166,6 +172,8 @@ public class FirstPersonController : MonoBehaviour
         defaultYpos = playerCamera.transform.localPosition.y;
         defaultFOV = playerCamera.fieldOfView;
 
+        spotlightLight = spotlight.GetComponent<Light>();
+
         currentHealth = maxHealth;
         currentStamina = maxStamina;
         originalStaminaRegenTime = timeBeforeStaminaRegenStarts;
@@ -189,6 +197,7 @@ public class FirstPersonController : MonoBehaviour
         {
             HandleMovementInput();
             HandleMouseLook();
+            HandleSpotlight();
 
             if (canJump)
                 HandleJump();
@@ -239,6 +248,20 @@ public class FirstPersonController : MonoBehaviour
 
         // Look Left & Right
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
+    }
+
+    private void HandleSpotlight()
+    {
+        if (Input.GetKeyUp(spotlightKey) && useSpotlight)
+        {
+            useSpotlight = false;
+            spotlightLight.enabled = false;
+        }
+        else if (Input.GetKeyUp(spotlightKey) && !useSpotlight)
+        {
+            useSpotlight = true;
+            spotlightLight.enabled = true;
+        }
     }
 
     private void HandleJump()

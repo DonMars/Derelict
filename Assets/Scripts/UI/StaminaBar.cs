@@ -12,10 +12,14 @@ public class StaminaBar : MonoBehaviour
     [SerializeField] Color32 frontBarColor;
     [SerializeField] Color32 backBarColor;
     [SerializeField] Color32 backBarRefillColor;
+    [SerializeField] Animator hudStaminaIndicator;
+    [SerializeField] float lowStamina;
     public Image frontStaminaBar;
     public Image backStaminaBar;
     public float chipSpeed = 2f;
     private float maxStamina;
+    bool isStaminaLow;
+    bool isStaminaZero;
 
     Image staminaColor;
 
@@ -29,6 +33,27 @@ public class StaminaBar : MonoBehaviour
     void Update()
     {
         currentStamina = characterController.currentStamina;
+
+        hudStaminaIndicator.SetBool("isStaminaLow", isStaminaLow);
+        hudStaminaIndicator.SetBool("isStaminaZero", isStaminaZero);
+
+        if (currentStamina == 0 || currentStamina < 0)
+        {
+            isStaminaZero = true;
+        }
+        else if (currentStamina > 0)
+        {
+            isStaminaZero = false;
+        }
+
+        if (currentStamina <= lowStamina)
+        {
+            isStaminaLow = true;
+        }
+        else if (currentStamina > lowStamina)
+        {
+            isStaminaLow = false;
+        }
 
         UpdateStaminaUI();
     }
