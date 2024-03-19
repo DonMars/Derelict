@@ -508,13 +508,13 @@ MonoBehaviour:
   canInteract: 1
   useFootsteps: 1
   useStamina: 1
-  useSpotlight: 1
+  useFlashlight: 1
   sprintKey: 304
   jumpKey: 32
   crouchKey: 306
   zoomKey: 324
   interactKey: 101
-  spotlightKey: 113
+  flashlightKey: 113
   interactionRayPoint: {x: 0.5, y: 0.5, z: 0}
   interactionDistance: 3
   interactionLayer:
@@ -810,12 +810,19 @@ MonoBehaviour:
   isCriticalDamageRandom: 1
   criticalDamageMin: 3
   criticalDamageMax: 5
+  weaponEnergy: 0
+  weaponEnergyMax: 100
+  energyUse: 12
+  energyRechargeRate: 0.1
+  overchargedEnergyRechargeRate: 0.35
+  overchargeDelay: 5
+  canShoot: 1
   range: 100
   impactForce: 16
   laserShotSFX: {fileID: 1460133751913603449}
   laserShotSFX2: {fileID: 4739538910469097141}
   shootPoint: {fileID: 7346646458932700791}
-  muzzleFlash: {fileID: 583920295594936070}
+  muzzleFlash: {fileID: 2732305977250444668}
   impactEffect: {fileID: 4716829675714818566, guid: 832c9de62dcd1404d913bae1056144e4,
     type: 3}
   leavesDecal: 1
@@ -1167,6 +1174,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: 14FMuzzleFlash
       objectReference: {fileID: 0}
+    - target: {fileID: 4482086010648451352, guid: d7a06acc1f75d1d468ecbcd98499648f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6666799802977691824, guid: d7a06acc1f75d1d468ecbcd98499648f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1237,12 +1249,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7a06acc1f75d1d468ecbcd98499648f, type: 3}
---- !u!198 &583920295594936070 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 2250627939589842633, guid: d7a06acc1f75d1d468ecbcd98499648f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1666708193750917583}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5450601693980952959 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6666799802977691824, guid: d7a06acc1f75d1d468ecbcd98499648f,
@@ -1265,7 +1271,7 @@ PrefabInstance:
     - target: {fileID: 4482086010648451352, guid: 1e642355131adec48a281a35baa75640,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6666799802977691824, guid: 1e642355131adec48a281a35baa75640,
         type: 3}
@@ -1322,6 +1328,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e642355131adec48a281a35baa75640, type: 3}
+--- !u!198 &2732305977250444668 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2250627939589842633, guid: 1e642355131adec48a281a35baa75640,
+    type: 3}
+  m_PrefabInstance: {fileID: 4238115812942156725}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7374069317962513157 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6666799802977691824, guid: 1e642355131adec48a281a35baa75640,

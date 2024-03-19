@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 712421078211428506}
   - component: {fileID: 294806129922017720}
   - component: {fileID: 7698722616083859838}
+  - component: {fileID: 2389867566407749275}
   m_Layer: 2
   m_Name: Cube Model
   m_TagString: Untagged
@@ -4937,6 +4938,27 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!95 &2389867566407749275
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2266809919610816791}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 62c3812f5f4a4fd43827ee5b2af9db1e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4412342059128026390
 GameObject:
   m_ObjectHideFlags: 0
@@ -4947,7 +4969,9 @@ GameObject:
   m_Component:
   - component: {fileID: 504010114557804814}
   - component: {fileID: 214337266042589207}
+  - component: {fileID: 4702251348504440737}
   - component: {fileID: 7980461698582921990}
+  - component: {fileID: 4131428751879779361}
   - component: {fileID: 2792743917991474540}
   - component: {fileID: 1221166124751304821}
   - component: {fileID: 9037990556518880914}
@@ -4990,7 +5014,24 @@ MonoBehaviour:
   isCubeValueRandom: 0
   minRandomValue: 5
   maxRandomValue: 5
-  cubeCollider: {fileID: 0}
+  cubeCollider: {fileID: 9037990556518880914}
+--- !u!114 &4702251348504440737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4412342059128026390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 642c351577d02de4e8dfde49f50f3d79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceMode: 1
+  horizontalRangeMin: -0.35
+  horizontalRangeMax: 0.35
+  verticalRangeMin: 0.85
+  verticalRangeMax: 1.25
 --- !u!114 &7980461698582921990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5004,12 +5045,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  minSpeed: 32
-  maxSpeed: 64
-  destroyOnTouch: 1
   collectDistance: 1
   playerDetected: 0
-  attractorSpeed: 0.01
+  attractorSpeed: 0.04
+--- !u!114 &4131428751879779361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4412342059128026390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb9d8c3dc1e0d4b4594b8b83a482d2df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubeAnimator: {fileID: 2389867566407749275}
+  destroyInSecondsMin: 15
+  destroyInSecondsMax: 18
+  destroyAnimationTime: 4.15
 --- !u!135 &2792743917991474540
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class CubeResource : MonoBehaviour
     private void Awake()
     {
         cubeHUDIcon = GameObject.Find("CubeImage");
-        cubeHUDIconAnimator = cubeHUDIcon.GetComponent<Animator>();
+        cubeHUDIconAnimator = GameObject.Find("CubeImage").GetComponent<Animator>();
     }
 
     private void Start()

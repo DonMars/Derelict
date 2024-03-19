@@ -40,6 +40,7 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
+        maxHealth = characterController.maxHealth;
         currentHealth = characterController.currentHealth;
 
         UpdateHealthUI();

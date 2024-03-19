@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class DestroyAfterXSeconds : MonoBehaviour
 {
-    [SerializeField] float destroyInSeconds = 3;
+    [SerializeField, Tooltip("Time in seconds to destroy this Game Object")]
+    float destroyInSeconds = 3;
 
     void Start()
     {

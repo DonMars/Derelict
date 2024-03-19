@@ -1,20 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 
 public class FirstPersonController : MonoBehaviour
 {
     #region Initialization
     public bool CanMove { get; private set; } = true;
-    private bool IsSprinting => canSprint && Input.GetKey(sprintKey) && Input.GetAxis("Vertical") > 0;
-    private bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !IsSliding;
-    private bool ShouldCrouch => (Input.GetKeyDown(crouchKey) || Input.GetKeyUp(crouchKey)) && !duringCrouchAnimation && characterController.isGrounded;
+    bool IsSprinting => canSprint && Input.GetKey(sprintKey) && Input.GetAxis("Vertical") > 0;
+    bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !IsSliding;
+    bool ShouldCrouch => (Input.GetKeyDown(crouchKey) || Input.GetKeyUp(crouchKey)) && !duringCrouchAnimation && characterController.isGrounded;
 
     [Header("Functions")]
     [SerializeField] bool canSprint = true;
@@ -26,7 +21,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] bool canInteract = true;
     [SerializeField] bool useFootsteps = true;
     [SerializeField] bool useStamina = true;
-    [SerializeField] bool useSpotlight = true;
+    [SerializeField] bool useFlashlight = true;
 
     [Header("Controls")]
     [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
@@ -34,7 +29,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] KeyCode interactKey = KeyCode.E;
-    [SerializeField] KeyCode spotlightKey = KeyCode.Q;
+    [SerializeField] KeyCode flashlightKey = KeyCode.Q;
 
     [Header("Interactions")]
     [SerializeField] Vector3 interactionRayPoint = default;
@@ -43,10 +38,10 @@ public class FirstPersonController : MonoBehaviour
     Interactable currentInteractable;
 
     [Header("Health")]
-    [SerializeField] public float maxHealth = 100;
-    [SerializeField] float timeBeforeRegen = 3;
-    [SerializeField] float regenIncrementValue = 1;
-    [SerializeField] float regenIncrementTime = 0.1f;
+    [SerializeField, Tooltip("Maximum health value")] public float maxHealth = 100;
+    [SerializeField, Tooltip("Time in seconds before health regeneration starts")] float timeBeforeRegen = 3;
+    [SerializeField, Tooltip("Health regeneration increment value")] float regenIncrementValue = 1;
+    [SerializeField, Tooltip("Health regeneration increment rate")] float regenIncrementTime = 0.1f;
     public float currentHealth;
     Coroutine regeneratingHealth;
     public static Action<float> OnTakeDamage;
@@ -63,21 +58,21 @@ public class FirstPersonController : MonoBehaviour
     }
 
     [Header("Stamina")]
-    [SerializeField] public float maxStamina = 100;
-    [SerializeField] float staminaUseMultiplier = 5;
-    [SerializeField] float timeBeforeStaminaRegenStarts = 5;
-    [SerializeField] float depletedStaminaRegenTime = 10;
-    [SerializeField] float staminaValueIncrement = 2;
-    [SerializeField] float staminaTimeIncrement = 0.1f;
+    [SerializeField, Tooltip("Maximum stamina value")] public float maxStamina = 100;
+    [SerializeField, Tooltip("Controls how much stamina is depleted")] float staminaUseMultiplier = 5;
+    [SerializeField, Tooltip("Time in seconds before stamina regeneration starts")] float timeBeforeStaminaRegenStarts = 5;
+    [SerializeField, Tooltip("Time in seconds before stamina regeneration starts after fully depleted")] float depletedStaminaRegenTime = 10;
+    [SerializeField, Tooltip("Stamina regeneration increment value")] float staminaValueIncrement = 2;
+    [SerializeField, Tooltip("Stamina regeneration increment rate")] float staminaTimeIncrement = 0.1f;
     public float currentStamina;
     Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
     float originalStaminaRegenTime;
 
     [Header("Moving")]
-    [SerializeField] float walkSpeed = 3.0f;
-    [SerializeField] float sprintSpeed = 6.0f;
-    [SerializeField] float crouchSpeed = 1.5f;
+    [SerializeField] public float walkSpeed = 3.0f;
+    [SerializeField] public float sprintSpeed = 6.0f;
+    [SerializeField] public float crouchSpeed = 1.5f;
     [SerializeField] float slopeSpeed = 8f;
 
     [Header("Looking")]
@@ -252,14 +247,14 @@ public class FirstPersonController : MonoBehaviour
 
     private void HandleSpotlight()
     {
-        if (Input.GetKeyUp(spotlightKey) && useSpotlight)
+        if (Input.GetKeyUp(flashlightKey) && useFlashlight)
         {
-            useSpotlight = false;
+            useFlashlight = false;
             spotlightLight.enabled = false;
         }
-        else if (Input.GetKeyUp(spotlightKey) && !useSpotlight)
+        else if (Input.GetKeyUp(flashlightKey) && !useFlashlight)
         {
-            useSpotlight = true;
+            useFlashlight = true;
             spotlightLight.enabled = true;
         }
     }
@@ -515,7 +510,7 @@ public class FirstPersonController : MonoBehaviour
         zoomRoutine = null;
     }
 
-    private IEnumerator RegenerateHealth()
+    public IEnumerator RegenerateHealth()
     {
         yield return new WaitForSeconds(timeBeforeRegen);
         WaitForSeconds timeToWait = new WaitForSeconds(regenIncrementTime);
