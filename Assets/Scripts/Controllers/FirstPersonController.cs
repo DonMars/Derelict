@@ -22,6 +22,10 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] bool useFootsteps = true;
     [SerializeField] bool useStamina = true;
     [SerializeField] bool useFlashlight = true;
+    
+    [Header("Special Functions")]
+    public bool canRegenerateHealth = false;
+    public bool canUseDash = false;
 
     [Header("Controls")]
     [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
@@ -38,10 +42,10 @@ public class FirstPersonController : MonoBehaviour
     Interactable currentInteractable;
 
     [Header("Health")]
-    [SerializeField, Tooltip("Maximum health value")] public float maxHealth = 100;
-    [SerializeField, Tooltip("Time in seconds before health regeneration starts")] float timeBeforeRegen = 3;
-    [SerializeField, Tooltip("Health regeneration increment value")] float regenIncrementValue = 1;
-    [SerializeField, Tooltip("Health regeneration increment rate")] float regenIncrementTime = 0.1f;
+    [Tooltip("Maximum health value")] public float maxHealth = 100;
+    [Tooltip("Time in seconds before health regeneration starts")] public float timeBeforeRegen = 3;
+    [Tooltip("Health regeneration increment value")] public float regenIncrementValue = 1;
+    [Tooltip("Health regeneration increment rate")] public float regenIncrementTime = 0.1f;
     public float currentHealth;
     Coroutine regeneratingHealth;
     public static Action<float> OnTakeDamage;
@@ -58,21 +62,24 @@ public class FirstPersonController : MonoBehaviour
     }
 
     [Header("Stamina")]
-    [SerializeField, Tooltip("Maximum stamina value")] public float maxStamina = 100;
-    [SerializeField, Tooltip("Controls how much stamina is depleted")] float staminaUseMultiplier = 5;
-    [SerializeField, Tooltip("Time in seconds before stamina regeneration starts")] float timeBeforeStaminaRegenStarts = 5;
-    [SerializeField, Tooltip("Time in seconds before stamina regeneration starts after fully depleted")] float depletedStaminaRegenTime = 10;
-    [SerializeField, Tooltip("Stamina regeneration increment value")] float staminaValueIncrement = 2;
-    [SerializeField, Tooltip("Stamina regeneration increment rate")] float staminaTimeIncrement = 0.1f;
+    [Tooltip("Maximum stamina value")] public float maxStamina = 100;
+    [Tooltip("Controls how much stamina is depleted")] public float staminaUseMultiplier = 5;
+    [Tooltip("Time in seconds before stamina regeneration starts")] public float timeBeforeStaminaRegenStarts = 5;
+    [Tooltip("Time in seconds before stamina regeneration starts after fully depleted")] public float depletedStaminaRegenTime = 10;
+    [Tooltip("Stamina regeneration increment value")] public float staminaValueIncrement = 2;
+    [Tooltip("Stamina regeneration increment rate")] public float staminaTimeIncrement = 0.1f;
     public float currentStamina;
     Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
-    float originalStaminaRegenTime;
+    public float originalStaminaRegenTime;
+
+    [Header("Special Abilities")]
+    //Dash Ability
 
     [Header("Moving")]
-    [SerializeField] public float walkSpeed = 3.0f;
-    [SerializeField] public float sprintSpeed = 6.0f;
-    [SerializeField] public float crouchSpeed = 1.5f;
+    public float walkSpeed = 3.0f;
+    public float sprintSpeed = 6.0f;
+    public float crouchSpeed = 1.5f;
     [SerializeField] float slopeSpeed = 8f;
 
     [Header("Looking")]
@@ -99,11 +106,11 @@ public class FirstPersonController : MonoBehaviour
     bool duringCrouchAnimation;
 
     [Header("Headbob")]
-    [SerializeField] float walkBobSpeed = 14f;
+    public float walkBobSpeed = 14f;
     [SerializeField] float walkBobAmount = 0.05f;
-    [SerializeField] float sprintBobSpeed = 18f;
+    public float sprintBobSpeed = 18f;
     [SerializeField] float sprintBobAmount = 0.11f;
-    [SerializeField] float crouchBobSpeed = 8f;
+    public float crouchBobSpeed = 8f;
     [SerializeField] float crouchBobAmount = 0.025f;
     float defaultYpos = 0f;
     float timer;
@@ -119,9 +126,9 @@ public class FirstPersonController : MonoBehaviour
     float weaponSwayOriginalSmooth;
 
     [Header("Footsteps")]
-    [SerializeField] float baseStepSpeed = 0.5f;
-    [SerializeField] float crouchStepMultiplier = 1.5f;
-    [SerializeField] float sprintStepMultiplier = 0.6f;
+    public float baseStepSpeed = 0.5f;
+    public float crouchStepMultiplier = 1.5f;
+    public float sprintStepMultiplier = 0.6f;
     [SerializeField] AudioSource footstepAudioSource = default;
     [SerializeField] AudioClip[] grassClips = default;
     [SerializeField] AudioClip[] metalClips = default;
@@ -512,21 +519,24 @@ public class FirstPersonController : MonoBehaviour
 
     public IEnumerator RegenerateHealth()
     {
-        yield return new WaitForSeconds(timeBeforeRegen);
-        WaitForSeconds timeToWait = new WaitForSeconds(regenIncrementTime);
-
-        while (currentHealth < maxHealth)
+        if (canRegenerateHealth)
         {
-            currentHealth += regenIncrementValue;
+            yield return new WaitForSeconds(timeBeforeRegen);
+            WaitForSeconds timeToWait = new WaitForSeconds(regenIncrementTime);
 
-            if (currentHealth > maxHealth)
-                currentHealth = maxHealth;
+            while (currentHealth < maxHealth)
+            {
+                currentHealth += regenIncrementValue;
 
-            OnHeal?.Invoke(currentHealth);
-            yield return timeToWait;
+                if (currentHealth > maxHealth)
+                    currentHealth = maxHealth;
+
+                OnHeal?.Invoke(currentHealth);
+                yield return timeToWait;
+            }
+
+            regeneratingHealth = null;
         }
-
-        regeneratingHealth = null;
     }
 
     private IEnumerator RegenerateStamina()

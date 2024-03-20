@@ -24,6 +24,7 @@ public class OptionsManager : MonoBehaviour
 
         resolutionDropdown.ClearOptions();
 
+        #pragma warning disable 0618 //Disables warning for deprecated refreshRate function
         currentRefreshRate = Screen.currentResolution.refreshRate;
 
         for (int i = 0; i < resolutions.Length; i++)
@@ -43,6 +44,7 @@ public class OptionsManager : MonoBehaviour
                 currentResolutionIndex = i;
             }
         }
+        #pragma warning restore 0618 //Restores warning
 
         resolutionDropdown.AddOptions(resolutionOptions);
         resolutionDropdown.value = currentResolutionIndex;  

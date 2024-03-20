@@ -9,37 +9,37 @@ public class GunController : MonoBehaviour
     [SerializeField] new Camera camera;
 
     [Header("Fire Rate")]
-    [SerializeField] public float fireRate = 30f;
-    [SerializeField] public float nextTimeToFire = 0;
+    public float fireRate = 30f;
+    public float nextTimeToFire = 0;
 
     [Header("Damage")]
-    [SerializeField] public int normalDamage = 10;
+    public int normalDamage = 10;
 
     // Random Damage
-    [SerializeField] public bool dealsRandomDamage;
-    [SerializeField] public int randomDamageMin = 1;
-    [SerializeField] public int randomDamageMax = 3;
+    public bool dealsRandomDamage;
+    public int randomDamageMin = 1;
+    public int randomDamageMax = 3;
     int randomDamage;
 
     // Critical Chance
-    [SerializeField] public bool hasCriticalChance;
-    [Range(0, 100)] [SerializeField] public int criticalChance;
-    [SerializeField] public int criticalDamage;
-    [SerializeField] public bool isCriticalDamageMultiplicative;
-    [SerializeField] public bool isCriticalDamageRandom;
-    [SerializeField] public int criticalDamageMin;
-    [SerializeField] public int criticalDamageMax;
+    public bool hasCriticalChance;
+    [Range(0, 100)] public int criticalChance;
+    public int criticalDamage;
+    public bool isCriticalDamageMultiplicative;
+    public bool isCriticalDamageRandom;
+    public int criticalDamageMin;
+    public int criticalDamageMax;
     bool isDamageCritical = false;
     int randomCriticalDamage;
 
     [Header("Energy")]
-    [SerializeField] public float weaponEnergy = 0f;
-    [SerializeField] public float weaponEnergyMax = 100f;
-    [SerializeField] public float energyUse = 6.5f;
-    [SerializeField] public float energyRechargeRate = 0.1f;
-    [SerializeField] public float overchargedEnergyRechargeRate = 0.5f;
-    [SerializeField] public float overchargeDelay = 5f;
-    [SerializeField] public bool canShoot = true;
+    public float weaponEnergy = 0f;
+    public float weaponEnergyMax = 100f;
+    public float energyUse = 6.5f;
+    public float energyRechargeRate = 0.1f;
+    public float overchargedEnergyRechargeRate = 0.5f;
+    public float overchargeDelay = 5f;
+    public bool canShoot = true;
     float energyRechargeRateOriginal;
     bool isOvercharged = false;
 
@@ -47,7 +47,7 @@ public class GunController : MonoBehaviour
     [SerializeField] float range = 100f;
 
     [Header("Pysical Force")]
-    [SerializeField] float impactForce = 32f;
+    public float impactForce = 32f;
 
     [Header("SFX")]
     [SerializeField] AudioSource laserShotSFX;
