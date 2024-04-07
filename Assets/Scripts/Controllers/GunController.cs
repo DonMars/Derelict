@@ -7,6 +7,7 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
     [SerializeField] new Camera camera;
+    public LayerMask rayCollisionMask;
 
     [Header("Fire Rate")]
     public float fireRate = 30f;
@@ -140,7 +141,7 @@ public class GunController : MonoBehaviour
 
         // Raycast Control
         RaycastHit hit;
-        if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, range))
+        if (Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, range, rayCollisionMask))
         {
             EnemyHealth target = hit.transform.GetComponent<EnemyHealth>();
 

@@ -12,8 +12,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eecc4e898bdb49409ca45ef4f98c004, type: 3}
   m_Name: HermesChip1
   m_EditorClassIdentifier: 
-  name: HyperSpeed Grade C
-  description: Increases movement speed by 5%
+  type: 2
+  name: Hermes Chip V.1
+  description: Increases running speed by 10%
   icon: {fileID: 21300000, guid: 743b5d8e33d6fa14e814488a59a7b937, type: 3}
   cost: 125
-  updateType: 2
+  purchased: 0
+  normalDamageIncrease: 0
+  randomDamageMinIncrease: 0
+  randomDamageMaxIncrease: 0
+  fireRateIncrease: 0
+  criticalChanceIncrease: 0
+  criticalDamageIncrease: 0
+  makeCriticalDamageMultiplicative: 0
+  makeCriticalDamageRandom: 0
+  criticalDamageRandomMinIncrease: 0
+  criticalDamageRandomMaxIncrease: 0
+  weaponEnergyMaxIncrease: 0
+  weaponEnergyUseDecrease: 0
+  weaponEnergyRechargeRateIncrease: 0
+  weaponEnergyOverchargedRechargeRateIncrease: 0
+  weaponOverchargeDelayDecrease: 0
+  maxHealthIncrease: 0
+  timeBeforeRegenDecrease: 0
+  regenIncrementValueIncrease: 0
+  regenIncrementTimeDecrease: 0
+  baseStepIncrease: 3
+  walkSpeedIncrease: 0
+  walkBobSpeedIncrease: 0
+  sprintSpeedIncrease: 10
+  sprintBobSpeedIncrease: 10
+  crouchSpeedIncrease: 0
+  crouchBobSpeedIncrease: 0
+  allSpeedIncrease: 0
+  allBobSpeedIncrease: 0
+  maxStaminaIncrease: 0
+  staminaUseReduction: 0
+  timeBeforeStaminaRegenReduction: 0
+  timeBeforeDepletedStaminaRegenReduction: 0
+  staminaRegenValueIncrease: 0
+  enableHealthRegen: 0
+  enableDashAbility: 0
+  enableCriticalDamage: 0

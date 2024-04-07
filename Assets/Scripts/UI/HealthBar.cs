@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] public FirstPersonController characterController;
-    [SerializeField] float currentHealth;
+    FirstPersonController characterController;
     [SerializeField] float lerpTimer = 0.05f;
     [SerializeField] float lerpMultiplier = 0.2f;
     [SerializeField] float delayTime = 0.5f;
@@ -25,6 +24,7 @@ public class HealthBar : MonoBehaviour
     public Image frontHealthBar;
     public Image backHealthBar;
     public float chipSpeed = 2f;
+    float currentHealth;
     float maxHealth;
     float delayTimer;
 
@@ -32,6 +32,7 @@ public class HealthBar : MonoBehaviour
 
     void Awake()
     {
+        characterController = FindAnyObjectByType<FirstPersonController>();
         frontHealthBar.color = frontBarColor;
         frontBarColorBak = frontBarColor;
         currentHealth = characterController.maxHealth;

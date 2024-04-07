@@ -10,7 +10,15 @@ public class UI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI energyText = default;
     float currentEnergy;
     float currentStamina;
-    
+    GunController gunController;
+    FirstPersonController firstPersonController;
+
+    private void Start()
+    {
+        gunController = FindObjectOfType<GunController>();
+        firstPersonController = FindObjectOfType<FirstPersonController>();
+    }
+
     private void OnEnable()
     {
         FirstPersonController.OnDamage += UpdateHealth;
@@ -26,10 +34,10 @@ public class UI : MonoBehaviour
 
     private void Update()
     {
-        currentEnergy = FindObjectOfType<GunController>().weaponEnergy;
+        currentEnergy = gunController.weaponEnergy;
         energyText.text = currentEnergy.ToString("F0");
         
-        currentStamina = FindObjectOfType<FirstPersonController>().currentStamina;
+        currentStamina = firstPersonController.currentStamina;
         staminaText.text = currentStamina.ToString("F0");
     }
 

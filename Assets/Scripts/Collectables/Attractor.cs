@@ -22,17 +22,17 @@ public class Attractor : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            this.gameObject.GetComponent<BoxCollider>().enabled = true;
-            this.gameObject.GetComponent<Rigidbody>().useGravity = true;
-            playerDetected = false;
-        }
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        this.gameObject.GetComponent<BoxCollider>().enabled = true;
+    //        this.gameObject.GetComponent<Rigidbody>().useGravity = true;
+    //        playerDetected = false;
+    //    }
+    //}
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (playerDetected)
         {

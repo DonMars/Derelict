@@ -16,11 +16,9 @@ public class EnergyBar : MonoBehaviour
     [SerializeField] Color32 barUltraLowColor;
     public Image energyBar;
 
-    float currentEnergy;
-    float maxEnergy;
+    GunController gunController;
 
     [SerializeField] float delayTime = 0.5f;
-    [SerializeField] float lerpTimer = 0.05f;
     float delayTimer;
 
     private void Awake()
@@ -28,10 +26,15 @@ public class EnergyBar : MonoBehaviour
         energyBar.color = barColor;
     }
 
+    private void Start()
+    {
+        gunController = FindObjectOfType<GunController>();
+    }
+
     void Update()
     {
-        currentEnergy = FindAnyObjectByType<GunController>().weaponEnergy;
-        maxEnergy = FindAnyObjectByType<GunController>().weaponEnergyMax;
+        float currentEnergy = gunController.weaponEnergy;
+        float maxEnergy = gunController.weaponEnergyMax;
 
         float fill = energyBar.fillAmount;
 
@@ -50,15 +53,8 @@ public class EnergyBar : MonoBehaviour
         {
             float eFraction = currentEnergy / maxEnergy;
 
-            if (fill > eFraction)
+            if (fill > eFraction || fill < eFraction)
             {
-                energyBar.fillAmount = eFraction;
-                lerpTimer += Time.deltaTime;
-            }
-
-            if (fill < eFraction)
-            {
-                lerpTimer += Time.deltaTime;
                 energyBar.fillAmount = eFraction;
             }
         }

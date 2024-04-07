@@ -5047,7 +5047,7 @@ MonoBehaviour:
   target: {fileID: 0}
   collectDistance: 1
   playerDetected: 0
-  attractorSpeed: 0.04
+  attractorSpeed: 0.12
 --- !u!114 &4131428751879779361
 MonoBehaviour:
   m_ObjectHideFlags: 0

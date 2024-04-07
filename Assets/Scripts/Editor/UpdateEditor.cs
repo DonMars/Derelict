@@ -133,6 +133,8 @@ public class UpdateEditor : Editor
                     break;
                 }
         }
+
+        EditorUtility.SetDirty(target);
     }
 
     private void Space(int space)

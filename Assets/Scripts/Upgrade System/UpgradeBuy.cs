@@ -7,18 +7,20 @@ using UnityEngine.UI;
 public class UpgradeBuy : MonoBehaviour
 {
     public ShopDisplay displayedUpdate;
-    int currentBalance;
-    Button buyButton;
     public GameObject soldText;
+    Button buyButton;
+    GameManager gameManager;
+    int currentBalance;
 
     void Start()
     {
         buyButton = GetComponent<Button>();
+        gameManager = FindAnyObjectByType<GameManager>();
     }
 
     void Update()
     {
-        currentBalance = FindAnyObjectByType<GameManager>().cubes;
+        currentBalance = gameManager.cubes;
 
         if (currentBalance < displayedUpdate.displayedCost || displayedUpdate.displayedUpgrade.purchased)
             buyButton.interactable = false;

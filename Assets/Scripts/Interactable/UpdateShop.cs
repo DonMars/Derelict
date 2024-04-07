@@ -8,15 +8,17 @@ public class UpdateShop : Interactable
     public GameObject shopUI;
     public GameObject HUD;
     bool shopOpen = false;
+    PauseMenu pauseMenu;
 
     void Start()
     {
         Time.timeScale = 1;
+        pauseMenu = FindObjectOfType<PauseMenu>();
     }
 
     void Update()
     {
-        FindAnyObjectByType<PauseMenu>().shopOpen = shopOpen;
+        pauseMenu.shopOpen = shopOpen;
 
         if (shopUIActive && Input.GetKeyDown(KeyCode.Escape))
         {
@@ -45,7 +47,8 @@ public class UpdateShop : Interactable
         HUD.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        FindAnyObjectByType<FirstPersonController>().enabled = false;
+        FindObjectOfType<FirstPersonController>().enabled = false;
+        FindObjectOfType<GunController>().enabled = false;
         shopUIActive = true;
         shopUI.SetActive(true);
         Time.timeScale = 0;
@@ -58,6 +61,7 @@ public class UpdateShop : Interactable
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         FindAnyObjectByType<FirstPersonController>().enabled = true;
+        FindObjectOfType<GunController>().enabled = true;
         shopUIActive = false;
         shopUI.SetActive(false);
         Time.timeScale = 1;

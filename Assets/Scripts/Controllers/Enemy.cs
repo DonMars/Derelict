@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] float detectionRadius = 5;
     [SerializeField] LayerMask playerLayer;
     private bool aware;
+    private bool enemyCall = false;
+    private bool calledSwitch = false;
 
     [Header("Collision Damage")]
     [SerializeField] bool dealsOnCollisionDamage = false;
@@ -39,9 +41,20 @@ public class Enemy : MonoBehaviour
 
         if (aware)
         {
+            enemyCall = true;
             target = player.position;
             agent.SetDestination(target);
             rb.velocity = Vector3.zero;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.CompareTag("Enemy") && enemyCall && !calledSwitch)
+        {
+            calledSwitch = true;
+            other.GetComponent<Enemy>().aware = true;
+            Debug.Log("CALLED");
         }
     }
 

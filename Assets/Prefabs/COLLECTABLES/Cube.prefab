@@ -5005,12 +5005,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  minSpeed: 32
-  maxSpeed: 64
-  destroyOnTouch: 1
   collectDistance: 1
   playerDetected: 0
-  attractorSpeed: 0.01
+  attractorSpeed: 0.12
 --- !u!135 &2792743917991474540
 SphereCollider:
   m_ObjectHideFlags: 0
