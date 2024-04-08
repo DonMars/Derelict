@@ -6,24 +6,27 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField] int health;
-    [SerializeField] bool useRandomHealth;
-    [SerializeField] int randomHealthMin;
-    [SerializeField] int randomHealthMax;
+    [HideInInspector] public int startingHealth;
+    public int health;
+    public bool useRandomHealth;
+    public int randomHealthMin;
+    public int randomHealthMax;
+    public float timeBeforeDestroy;
+    EnemyLoot lootScript;
 
-    [Header("Loot")]
-    [SerializeField] bool dropsLoot;
-    [SerializeField] GameObject loot;
-    [SerializeField] int lootQuantityMin;
-    [SerializeField] int lootQuantityMax;
-    [SerializeField] bool hasChance;
-    
+    private void Start()
+    {
+        lootScript = GetComponent<EnemyLoot>();
+    }
+
     private void Awake()
     {
         if (useRandomHealth)
         {
             health = Random.Range(randomHealthMin, randomHealthMax + 1);
         }
+
+        startingHealth = health;
     }
 
     public void TakeDamage(int amount)
@@ -32,23 +35,12 @@ public class EnemyHealth : MonoBehaviour
 
         if(health <= 0f)
         {
-            if (dropsLoot)
-                LootDrop();
+            if (lootScript.dropsLoot)
+            {
+                lootScript.LootDrop();
+            }
 
-            Die();
-        }
-    }
-
-    void Die()
-    {
-        Destroy(gameObject);
-    }
-
-    void LootDrop()
-    {
-        for (int i = 0; i < Random.Range(lootQuantityMin,lootQuantityMax); ++i)
-        {
-            Instantiate(loot, transform.position, Quaternion.identity);
+            Destroy(gameObject);
         }
     }
 }
