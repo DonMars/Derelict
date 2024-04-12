@@ -108,7 +108,6 @@ public class EnemyBehavior : MonoBehaviour
         {
             calledSwitch = true;
             other.GetComponent<EnemyBehavior>().aware = true;
-            Debug.Log("CALLED");
         }
     }
 

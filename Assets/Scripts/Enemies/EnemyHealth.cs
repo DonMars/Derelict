@@ -11,7 +11,6 @@ public class EnemyHealth : MonoBehaviour
     public bool useRandomHealth;
     public int randomHealthMin;
     public int randomHealthMax;
-    public float timeBeforeDestroy;
     EnemyLoot lootScript;
 
     private void Start()

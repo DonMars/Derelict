@@ -75,7 +75,7 @@ public class GunController : MonoBehaviour
     {
         // Energy
         if (!isOvercharged)
-            weaponEnergy -= energyRechargeRate;
+            weaponEnergy -= energyRechargeRate * Time.deltaTime;
         else if (isOvercharged)
             StartCoroutine(RechargeDelay());
 

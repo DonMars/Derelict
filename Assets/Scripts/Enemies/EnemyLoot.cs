@@ -11,7 +11,6 @@ public class EnemyLoot : MonoBehaviour
     public bool hasChance;
     [Range(1, 100)] public int chancePercentage;
     [SerializeField] GameObject loot;
-    bool lootSwitch = false;
 
     EnemyHealth enemyHealth;
     
@@ -23,8 +22,6 @@ public class EnemyLoot : MonoBehaviour
 
             if (chance < chancePercentage)
             {
-                lootSwitch = true;
-
                 for (int i = 0; i < Random.Range(lootQuantityMin, lootQuantityMax); ++i)
                 {
                     Instantiate(loot, transform.position, Quaternion.identity);
@@ -33,8 +30,6 @@ public class EnemyLoot : MonoBehaviour
         }
         else
         {
-            lootSwitch = true;
-
             for (int i = 0; i < Random.Range(lootQuantityMin, lootQuantityMax); ++i)
             {
                 Instantiate(loot, transform.position, Quaternion.identity);
