@@ -63,6 +63,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -143271446261652067, guid: 2379ba1d1debdda45aac3ce887cd2537,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b2e8404341dc7a842811c09f2f8b69e7, type: 2}
     - target: {fileID: 919132149155446097, guid: 2379ba1d1debdda45aac3ce887cd2537,
         type: 3}
       propertyPath: m_Name
@@ -88,6 +93,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 3728421020469252012, guid: 2379ba1d1debdda45aac3ce887cd2537,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e38a2321df613794dadeda9671bea489, type: 2}
     - target: {fileID: 6834376597701442113, guid: 2379ba1d1debdda45aac3ce887cd2537,
         type: 3}
       propertyPath: m_Layer
