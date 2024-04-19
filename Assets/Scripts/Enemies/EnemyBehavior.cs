@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class EnemyBehavior : MonoBehaviour
 {
+    public Animator spybotAnimator;
+
     [Header("Detection")]
     public float detectionRadius = 5;
     public LayerMask playerLayer;
@@ -56,6 +58,7 @@ public class EnemyBehavior : MonoBehaviour
             enemyCall = true;
             target = player.position;
             agent.SetDestination(target);
+            spybotAnimator.SetBool("isWalking", true);
             rb.velocity = Vector3.zero;
         }
 
@@ -64,6 +67,7 @@ public class EnemyBehavior : MonoBehaviour
         {
             Vector3 point;
             patrolRange = Random.Range(patrolRangeMin, patrolRangeMax);
+            spybotAnimator.SetBool("isWalking", true);
 
             if (RandomPoint(centrePoint.position, patrolRange, out point))
             {
@@ -99,6 +103,7 @@ public class EnemyBehavior : MonoBehaviour
     IEnumerator PatrolWait()
     {
         yield return new WaitForSeconds(Random.Range(patrolWaitTimeMin, patrolWaitTimeMax+1));
+        spybotAnimator.SetBool("isWalking", false);
         patrolSwitch = false;
     }
 

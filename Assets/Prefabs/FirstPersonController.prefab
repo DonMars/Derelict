@@ -509,6 +509,8 @@ MonoBehaviour:
   useFootsteps: 1
   useStamina: 1
   useFlashlight: 1
+  canRegenerateHealth: 0
+  canUseDash: 0
   sprintKey: 304
   jumpKey: 32
   crouchKey: 306
@@ -532,6 +534,7 @@ MonoBehaviour:
   staminaValueIncrement: 2
   staminaTimeIncrement: 0.1
   currentStamina: 0
+  originalStaminaRegenTime: 0
   walkSpeed: 2.2
   sprintSpeed: 4
   crouchSpeed: 0.86
@@ -797,6 +800,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 310395302550533518}
+  rayCollisionMask:
+    serializedVersion: 2
+    m_Bits: 0
   fireRate: 2.6
   nextTimeToFire: 0
   normalDamage: 3
