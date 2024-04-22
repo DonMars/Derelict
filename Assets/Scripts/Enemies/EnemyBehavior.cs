@@ -48,8 +48,6 @@ public class EnemyBehavior : MonoBehaviour
     void Update()
     {
         // Player Detect
-        Physics.CheckSphere(transform.position, detectionRadius, playerLayer);
-
         if (Physics.CheckSphere(transform.position, detectionRadius, playerLayer))
             aware = true;
 
@@ -74,6 +72,7 @@ public class EnemyBehavior : MonoBehaviour
                 Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
                 agent.SetDestination(point);
                 StartCoroutine(PatrolWait());
+                spybotAnimator.SetBool("isWalking", false);
                 patrolSwitch = true;
             }
         }
@@ -103,7 +102,6 @@ public class EnemyBehavior : MonoBehaviour
     IEnumerator PatrolWait()
     {
         yield return new WaitForSeconds(Random.Range(patrolWaitTimeMin, patrolWaitTimeMax+1));
-        spybotAnimator.SetBool("isWalking", false);
         patrolSwitch = false;
     }
 
