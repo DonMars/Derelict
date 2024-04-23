@@ -73,7 +73,11 @@ public class FirstPersonController : MonoBehaviour
     public static Action<float> OnStaminaChange;
     public float originalStaminaRegenTime;
 
-    [Header("Special Abilities")]
+    [Header("Audio")]
+    public AudioSource healthRechargeSFX;
+    public AudioSource depletedHealthSFX;
+
+    //[Header("Special Abilities")]
     //Dash Ability
 
     [Header("Moving")]

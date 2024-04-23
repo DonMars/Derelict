@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class TestDamageSteps : MonoBehaviour
 {
-    [SerializeField] private float timeBetweenDamage = 0.25f;
-    [SerializeField] private float damageToTake = 3;
-    private bool isTouchingCollider = false;
-    private Coroutine decreaseHealth;
+    [SerializeField] float timeBetweenDamage = 0.25f;
+    [SerializeField] float damageToTake = 3;
+    bool isTouchingCollider = false;
+    Coroutine decreaseHealth;
+
+    public AudioSource playerHit1;
+    public AudioSource playerHit2;
+    public AudioSource playerHit3;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -28,6 +32,16 @@ public class TestDamageSteps : MonoBehaviour
         while (isTouchingCollider)
         {
             FirstPersonController.OnTakeDamage(damageToTake);
+
+            int hitSfxRandomizer = Random.Range(1, 4);
+
+            if (hitSfxRandomizer == 1)
+                playerHit1.Play();
+            else if (hitSfxRandomizer == 2)
+                playerHit2.Play();
+            else if (hitSfxRandomizer == 3)
+                playerHit3.Play();
+
             yield return new WaitForSeconds(timeBetweenDamage);
         }
     }

@@ -535,6 +535,8 @@ MonoBehaviour:
   staminaTimeIncrement: 0.1
   currentStamina: 0
   originalStaminaRegenTime: 0
+  healthRechargeSFX: {fileID: 0}
+  depletedHealthSFX: {fileID: 0}
   walkSpeed: 2.2
   sprintSpeed: 4
   crouchSpeed: 0.86
@@ -820,7 +822,7 @@ MonoBehaviour:
   weaponEnergyMax: 100
   energyUse: 12
   energyRechargeRate: 0.1
-  overchargedEnergyRechargeRate: 0.35
+  overchargedEnergyRechargeRate: 45
   overchargeDelay: 5
   canShoot: 1
   range: 100
@@ -1328,6 +1330,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7257828491167541437, guid: 1e642355131adec48a281a35baa75640,
+        type: 3}
+      propertyPath: m_Range
+      value: 45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

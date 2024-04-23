@@ -6,6 +6,9 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
 
+    // Scripted Instances
+    public bool musicStart1 = true;
+
     public Music[] music;
 
     void Awake()

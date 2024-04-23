@@ -5061,8 +5061,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeAnimator: {fileID: 2389867566407749275}
-  destroyInSecondsMin: 15
-  destroyInSecondsMax: 18
+  destroyInSecondsMin: 18
+  destroyInSecondsMax: 22
   destroyAnimationTime: 4.15
 --- !u!135 &2792743917991474540
 SphereCollider:

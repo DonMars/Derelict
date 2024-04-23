@@ -4,11 +4,22 @@ using UnityEngine;
 
 public class Door : Interactable
 {
-    [SerializeField] private int autoCloseDistance = 10;
-    [SerializeField] private Animator anim1;
-    [SerializeField] private Animator anim2;
-    private bool isOpen = false;
-    private bool canBeInteractedWith = true;
+    [Header("Door Settings")]
+    public bool canOpen = true;
+    [SerializeField] int autoCloseDistance = 10;
+
+    [Header("Animations")]
+    [SerializeField] Animator anim1;
+    [SerializeField] Animator anim2;
+
+    [Header("Audio")]
+    public AudioSource doorInteractSFX;
+    public AudioSource doorOpenSFX;
+    public AudioSource doorCloseSFX;
+
+    bool isOpen = false;
+    bool canBeInteractedWith = true;
+    bool openSwitch = false;
 
     public override void OnFocus()
     {
@@ -17,13 +28,22 @@ public class Door : Interactable
 
     public override void OnInteract()
     {
-        print("Open Sesame");
+        doorInteractSFX.Play();
 
-        if (canBeInteractedWith)
+        if (AudioManager.Instance.musicStart1)
+        {
+            StartCoroutine(PlayMusic());
+        }
+
+        if (canBeInteractedWith && canOpen && !openSwitch)
         {
             isOpen = !isOpen;
             anim1.SetBool("isOpen", isOpen);
             anim2.SetBool("isOpen", isOpen);
+
+            doorOpenSFX.Play();
+
+            StartCoroutine(DoorSwitch());
 
             StartCoroutine(AutoClose());
         }
@@ -45,8 +65,28 @@ public class Door : Interactable
                 isOpen = false;
                 anim1.SetBool("isOpen", isOpen);
                 anim2.SetBool("isOpen", isOpen);
+
+                doorOpenSFX.Play();
+
+                yield return new WaitForSeconds(.64f);
+
+                doorCloseSFX.Play();
             }
         }
+    }
+
+    IEnumerator DoorSwitch()
+    {
+        openSwitch = true;
+        yield return new WaitForSeconds(2);
+        openSwitch = false;
+    }
+
+    IEnumerator PlayMusic()
+    {
+        AudioManager.Instance.musicStart1 = false;
+        yield return new WaitForSeconds(2);
+        AudioManager.Instance.Play("SpaceStationAmbience");
     }
 
     private void Animator_LockInteraction()

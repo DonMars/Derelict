@@ -191,6 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 135e88768b440e44b8d8a0568f53ba6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level: 1
   cubes: 0
 --- !u!4 &252520600
 Transform:
@@ -260,6 +261,12 @@ MonoBehaviour:
     loop: 0
     pitch: 1.55
     volume: 0.35
+    source: {fileID: 0}
+  - name: SpaceStationAmbience
+    clip: {fileID: 8300000, guid: 5a2763f558141d74aae60c1efb852cb0, type: 3}
+    loop: 1
+    pitch: 1
+    volume: 0.32
     source: {fileID: 0}
 --- !u!4 &272978892
 Transform:
