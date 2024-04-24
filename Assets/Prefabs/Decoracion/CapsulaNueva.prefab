@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8997535809925198310, guid: f33ec97a14513ba48a6100416fef28b2,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 434beee72b2a4db4c99e14a31529d439, type: 2}
     - target: {fileID: -8679921383154817045, guid: f33ec97a14513ba48a6100416fef28b2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -68,6 +73,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: -2859109400176981367, guid: f33ec97a14513ba48a6100416fef28b2,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 434beee72b2a4db4c99e14a31529d439, type: 2}
     - target: {fileID: -1115428645308736531, guid: f33ec97a14513ba48a6100416fef28b2,
         type: 3}
       propertyPath: m_Layer
@@ -93,6 +103,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 1535686894170718441, guid: f33ec97a14513ba48a6100416fef28b2,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 434beee72b2a4db4c99e14a31529d439, type: 2}
     - target: {fileID: 2518821565451889855, guid: f33ec97a14513ba48a6100416fef28b2,
         type: 3}
       propertyPath: m_Layer
@@ -113,6 +128,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 6444263678948303042, guid: f33ec97a14513ba48a6100416fef28b2,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 434beee72b2a4db4c99e14a31529d439, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

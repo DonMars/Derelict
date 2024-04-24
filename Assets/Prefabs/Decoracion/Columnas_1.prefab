@@ -73,6 +73,16 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -3316209038747775882, guid: 183ed0860770d2649966359faf649f9a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ff4ad0c53b99407479691a6ebedf7ebc, type: 2}
+    - target: {fileID: -3035608602465568333, guid: 183ed0860770d2649966359faf649f9a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ff4ad0c53b99407479691a6ebedf7ebc, type: 2}
     - target: {fileID: -8140499575222096, guid: 183ed0860770d2649966359faf649f9a,
         type: 3}
       propertyPath: m_Layer
