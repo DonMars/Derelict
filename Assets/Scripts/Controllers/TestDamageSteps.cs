@@ -24,7 +24,7 @@ public class TestDamageSteps : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             isTouchingCollider = false;
-        StopCoroutine(decreaseHealth);
+        StopAllCoroutines();
     }
 
     private IEnumerator DecreaseHealth()
