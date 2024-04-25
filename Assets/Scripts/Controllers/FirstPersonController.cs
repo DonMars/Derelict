@@ -11,6 +11,8 @@ public class FirstPersonController : MonoBehaviour
     bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !IsSliding;
     bool ShouldCrouch => (Input.GetKeyDown(crouchKey) || Input.GetKeyUp(crouchKey)) && !duringCrouchAnimation && characterController.isGrounded;
 
+    public GameObject gameOverScreen;
+
     [Header("Functions")]
     [SerializeField] bool canSprint = true;
     [SerializeField] bool canJump = true;
@@ -423,7 +425,10 @@ public class FirstPersonController : MonoBehaviour
         if (regeneratingHealth != null)
             StopCoroutine(regeneratingHealth);
 
-        print("Player Died");
+        gameOverScreen.SetActive(true);
+        this.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
 
