@@ -8,6 +8,11 @@ public class GameManager : MonoBehaviour
     public int level = 1;
     public int cubes;
 
+    // Scripted Events
+    public bool firstDoor = false;
+    public bool firstContainer = false;
+    public bool firstVendingMachine = false;
+
     void Awake()
     {
         if (Instance == null)

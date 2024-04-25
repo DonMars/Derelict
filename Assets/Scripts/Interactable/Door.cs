@@ -16,14 +16,46 @@ public class Door : Interactable
     public AudioSource doorInteractSFX;
     public AudioSource doorOpenSFX;
     public AudioSource doorCloseSFX;
+    public AudioSource cantOpenSFX;
+
+    public GameObject openSign1;
+    public GameObject openSign2;
+    public GameObject closeSign1;
+    public GameObject closeSign2;
+    bool signSwitch = false;
 
     bool isOpen = false;
     bool canBeInteractedWith = true;
     bool openSwitch = false;
 
+    public GameObject interactionOverlay;
+
+    private void Update()
+    {
+        if (!canOpen)
+        {
+            openSign1.SetActive(false);
+            openSign2.SetActive(false);
+            closeSign1.SetActive(true);
+            closeSign2.SetActive(true);
+        }
+        else if (canOpen && !signSwitch)
+        {
+            signSwitch = true;
+            openSign1.SetActive(true);
+            openSign2.SetActive(true);
+            closeSign1.SetActive(false);
+            closeSign2.SetActive(false);
+        }
+    }
+
     public override void OnFocus()
     {
-        print("Door Switch : Press [E] to Interact");
+        if (!GameManager.Instance.firstDoor)
+        {
+            GameManager.Instance.firstDoor = true;
+            interactionOverlay.SetActive(true);
+        }
     }
 
     public override void OnInteract()
@@ -47,11 +79,15 @@ public class Door : Interactable
 
             StartCoroutine(AutoClose());
         }
+        else if (!canOpen)
+        {
+            cantOpenSFX.Play();
+        }
     }
 
     public override void OnLoseFocus()
     {
-        print("- - - - -");
+        
     }
 
     private IEnumerator AutoClose()

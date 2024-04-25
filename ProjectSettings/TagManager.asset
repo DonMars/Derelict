@@ -8,6 +8,7 @@ TagManager:
   - Footsteps/Grass
   - Footsteps/Wood
   - Enemy
+  - InteractionOverlay
   layers:
   - Default
   - TransparentFX
