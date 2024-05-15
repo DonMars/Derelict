@@ -32,6 +32,7 @@ public class Door : Interactable
 
     private void Update()
     {
+        // Changes Open/Closed door sign
         if (!canOpen)
         {
             openSign1.SetActive(false);
@@ -51,6 +52,7 @@ public class Door : Interactable
 
     public override void OnFocus()
     {
+        // Displays 'E' to interact message
         if (!GameManager.Instance.firstDoor)
         {
             GameManager.Instance.firstDoor = true;
@@ -62,11 +64,13 @@ public class Door : Interactable
     {
         doorInteractSFX.Play();
 
+        // Starts ambiance music
         if (AudioManager.Instance.musicStart1)
         {
             StartCoroutine(PlayMusic());
         }
 
+        // Opens/Closes the door via animation
         if (canBeInteractedWith && canOpen && !openSwitch)
         {
             isOpen = !isOpen;

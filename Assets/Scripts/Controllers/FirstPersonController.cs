@@ -1,7 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.Profiling;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class FirstPersonController : MonoBehaviour
 {
@@ -12,6 +17,7 @@ public class FirstPersonController : MonoBehaviour
     bool ShouldCrouch => (Input.GetKeyDown(crouchKey) || Input.GetKeyUp(crouchKey)) && !duringCrouchAnimation && characterController.isGrounded;
 
     public GameObject gameOverScreen;
+    bool killSwitch = false;
 
     [Header("Functions")]
     [SerializeField] bool canSprint = true;
@@ -50,17 +56,22 @@ public class FirstPersonController : MonoBehaviour
     [Tooltip("Health regeneration increment rate")] public float regenIncrementTime = 0.1f;
     public float currentHealth;
     Coroutine regeneratingHealth;
+
     public static Action<float> OnTakeDamage;
     public static Action<float> OnDamage;
+    public static Action<float> OnHealthRecover;
     public static Action<float> OnHeal;
+
     private void OnEnable()
     {
         OnTakeDamage += ApplyDamage;
+        OnHeal += ApplyHeal;
     }
 
     private void OnDisable()
     {
         OnTakeDamage -= ApplyDamage;
+        OnHeal -= ApplyHeal;
     }
 
     [Header("Stamina")]
@@ -95,8 +106,10 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField, Range(1, 90)] float lowerLookLimit = 80.0f;
 
     [Header("Spotlight")]
-    [SerializeField] GameObject spotlight;
-    Light spotlightLight;
+    public GameObject spotlight;
+    public AudioSource spotlightSFX;
+    public AudioSource spotlightSFX2;
+    float spotlightIntensityBak;
 
     [Header("Jumping")]
     [SerializeField] float gravity = 30.0f;
@@ -130,6 +143,7 @@ public class FirstPersonController : MonoBehaviour
     Coroutine zoomRoutine;
     float weaponSwayOriginalIntensity;
     float weaponSwayOriginalSmooth;
+    public bool isAiming = false;
 
     [Header("Footsteps")]
     public float baseStepSpeed = 0.5f;
@@ -160,9 +174,28 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
+    [Header("FX")]
+    public VFXOverlayHandler overlayHandler;
+    public Volume postProcess;
+    HUDEnabler hudEnabler;
+    UnityEngine.Rendering.Universal.ChromaticAberration chromaticAberration;
+    UnityEngine.Rendering.Universal.FilmGrain filmGrain;
+    UnityEngine.Rendering.Universal.LensDistortion lensDistortion;
+
+    public AudioSource damageSFX1;
+    public AudioSource damageSFX2;
+    public AudioSource damageSFX3;
+    public AudioSource damageSFX4;
+    public AudioSource damageSFX5;
+
+    public int damageSFXChanceMin;
+    public int damageSFXChanceMax;
+
+    public Animator healthBarFrameAnimator;
+    
     Camera playerCamera;
     CharacterController characterController;
-
+    
     Vector3 moveDirection;
     Vector2 currentInput;
 
@@ -180,14 +213,21 @@ public class FirstPersonController : MonoBehaviour
         defaultYpos = playerCamera.transform.localPosition.y;
         defaultFOV = playerCamera.fieldOfView;
 
-        spotlightLight = spotlight.GetComponent<Light>();
+        spotlightIntensityBak = spotlight.GetComponent<Light>().intensity;
 
         currentHealth = maxHealth;
-        currentStamina = maxStamina;
+        currentStamina = maxStamina;    
         originalStaminaRegenTime = timeBeforeStaminaRegenStarts;
 
         weaponSwayOriginalIntensity = weaponSwayControl.intensity;
         weaponSwayOriginalSmooth = weaponSwayControl.smooth;
+
+        postProcess = FindAnyObjectByType<Volume>();
+        overlayHandler = FindAnyObjectByType<VFXOverlayHandler>();
+
+        postProcess.profile.TryGet(out chromaticAberration);
+        postProcess.profile.TryGet(out filmGrain);
+        postProcess.profile.TryGet(out lensDistortion);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -197,6 +237,14 @@ public class FirstPersonController : MonoBehaviour
     {
         OnDamage?.Invoke(currentHealth);
         OnStaminaChange?.Invoke(currentStamina);
+        spotlight.GetComponent<Light>().intensity = 5.2f;
+        healthBarFrameAnimator = GameObject.Find("Frame").GetComponent<Animator>();
+        hudEnabler = FindObjectOfType<HUDEnabler>();
+
+        if (!GameManager.Instance.firstPlaythrough)
+        {
+            GameManager.Instance.firstPlaythrough = true;
+        }
     }
 
     void Update()
@@ -233,6 +281,42 @@ public class FirstPersonController : MonoBehaviour
 
             ApplyFinalMovements();
         }
+
+        StartCoroutine(RandomSpotlightFlicker());
+        HandlePostProcess();
+    }
+
+    void HandlePostProcess()
+    {
+        // Modify Volume on Health change
+
+        float currentChromaticIntensity = chromaticAberration.intensity.value;
+        float currentFilmGrainIntensity = filmGrain.intensity.value;
+
+        if (currentHealth > (maxHealth/2))
+        {
+            float chromaticInterpolation = Mathf.Lerp(currentChromaticIntensity, .205f, 10f);
+            chromaticAberration.intensity.Override(chromaticInterpolation);
+
+            float filmGrainInterpolation = Mathf.Lerp(currentFilmGrainIntensity, .306f, 10f);
+            filmGrain.intensity.Override(filmGrainInterpolation);
+        }
+        else if (currentHealth <= (maxHealth / 5))
+        {
+            float chromaticInterpolation = Mathf.Lerp(currentChromaticIntensity, .795f, 5f);
+            chromaticAberration.intensity.Override(chromaticInterpolation);
+
+            float filmGrainInterpolation = Mathf.Lerp(currentFilmGrainIntensity, .8f, 5f);
+            filmGrain.intensity.Override(filmGrainInterpolation);
+        }
+        else if (currentHealth <= (maxHealth / 2))
+        {
+            float chromaticInterpolation = Mathf.Lerp(currentChromaticIntensity, .5f, 7f);
+            chromaticAberration.intensity.Override(chromaticInterpolation);
+
+            float filmGrainInterpolation = Mathf.Lerp(currentFilmGrainIntensity, .520f, 7f);
+            filmGrain.intensity.Override(filmGrainInterpolation);
+        }
     }
 
     private void HandleMovementInput()
@@ -262,13 +346,21 @@ public class FirstPersonController : MonoBehaviour
     {
         if (Input.GetKeyUp(flashlightKey) && useFlashlight)
         {
+            spotlightSFX.pitch = .65f;
+            spotlightSFX.Play();
+            
             useFlashlight = false;
-            spotlightLight.enabled = false;
+            spotlight.GetComponent<Light>().enabled = false;
         }
         else if (Input.GetKeyUp(flashlightKey) && !useFlashlight)
         {
+            spotlightSFX.pitch = 1.2f;
+            spotlightSFX.Play();
+
             useFlashlight = true;
-            spotlightLight.enabled = true;
+            spotlight.GetComponent<Light>().enabled = true;
+
+            StartCoroutine(SpotlightFlicker());
         }
     }
 
@@ -303,6 +395,15 @@ public class FirstPersonController : MonoBehaviour
 
     private void HandleStamina()
     {
+        if (currentStamina <= 0 && hudEnabler.firstHUDEnable)
+        {
+            currentStamina = 0;
+            overlayHandler.TriggerStaminaDepletedAnimation();
+        }
+        else if (currentStamina > 0 && hudEnabler.firstHUDEnable)
+            overlayHandler.TriggerStaminaIdleAnimation();
+
+
         if (IsSprinting && !isCrouching && currentInput != Vector2.zero) // && characterController.isGrounded
         {
             if (regeneratingStamina != null)
@@ -313,8 +414,16 @@ public class FirstPersonController : MonoBehaviour
 
             currentStamina -= staminaUseMultiplier * Time.deltaTime;
 
-            if (currentStamina < 0)
-                currentStamina = 0;
+            // UI Effects
+            if (hudEnabler.firstHUDEnable)
+                overlayHandler.TriggerUseStaminaAnimations();
+
+            if (currentStamina <= 0)
+            {
+                canSprint = false;
+            }
+            else if (currentStamina > 0 && hudEnabler.firstHUDEnable)
+                overlayHandler.TriggerStaminaIdleAnimation();
 
             if (currentStamina < 10)
             {
@@ -327,9 +436,6 @@ public class FirstPersonController : MonoBehaviour
             }
 
             OnStaminaChange?.Invoke(currentStamina);
-
-            if (currentStamina <= 0)
-                canSprint = false;
         }
 
         if (!IsSprinting && currentStamina < maxStamina && regeneratingStamina == null)
@@ -343,6 +449,8 @@ public class FirstPersonController : MonoBehaviour
         if(Input.GetKeyDown(zoomKey))
         {
             weaponAnimator.SetBool("isAiming", true);
+            isAiming = true;
+            
             weaponSwayControl.intensity = weaponSwayOriginalIntensity / 3;
             weaponSwayControl.smooth = weaponSwayOriginalSmooth / 3;
 
@@ -350,6 +458,7 @@ public class FirstPersonController : MonoBehaviour
             {
                 StopCoroutine(zoomRoutine);
                 weaponAnimator.SetBool("isAiming", false);
+                isAiming = false;
                 weaponSwayControl.intensity = weaponSwayOriginalIntensity;
                 weaponSwayControl.smooth = weaponSwayOriginalSmooth;
                 zoomRoutine = null;
@@ -364,12 +473,14 @@ public class FirstPersonController : MonoBehaviour
             {
                 StopCoroutine(zoomRoutine);
                 weaponAnimator.SetBool("isAiming", false);
+                isAiming = false;
                 weaponSwayControl.intensity = weaponSwayOriginalIntensity;
                 weaponSwayControl.smooth = weaponSwayOriginalSmooth;
                 zoomRoutine = null;
             }
 
             weaponAnimator.SetBool("isAiming", false);
+            isAiming = false;
             weaponSwayControl.intensity = weaponSwayOriginalIntensity;
             weaponSwayControl.smooth = weaponSwayOriginalSmooth;
 
@@ -409,26 +520,76 @@ public class FirstPersonController : MonoBehaviour
         currentHealth -= dmg;
         OnDamage?.Invoke(currentHealth);
 
+        healthBarFrameAnimator.ResetTrigger("hbarDamage");
+        healthBarFrameAnimator.SetTrigger("hbarDamage");
+
+        if (dmg <= 10)
+            overlayHandler.TriggerSmallDamageAnimations();
+        else if (dmg > 10)
+            overlayHandler.TriggerMediumDamageAnimations();
+
         if (currentHealth <= 0)
             KillPlayer();
         else if (regeneratingHealth != null)
             StopCoroutine(regeneratingHealth);
+        
+        if (currentHealth > 0)
+            regeneratingHealth = StartCoroutine(RegenerateHealth());
 
-        regeneratingHealth = StartCoroutine(RegenerateHealth());
+        // Sfx
+        int chance = UnityEngine.Random.Range(1, 7);
+
+        if (chance > 5)
+        {
+            int randomSFX = UnityEngine.Random.Range(1, 6);
+            if (randomSFX == 5)
+            {
+                damageSFX5.pitch = UnityEngine.Random.Range(0.7f, 1f);
+                damageSFX5.Play();
+            }
+            else if (randomSFX == 4)
+            {
+                damageSFX4.pitch = UnityEngine.Random.Range(0.7f, 1f);
+                damageSFX4.Play();
+            }
+            else if (randomSFX == 3)
+            {
+                damageSFX3.pitch = UnityEngine.Random.Range(0.7f, 1f);
+                damageSFX3.Play();
+            }
+            else if (randomSFX == 2)
+            {
+                damageSFX2.pitch = UnityEngine.Random.Range(0.7f, 1f);
+                damageSFX2.Play();
+            }
+            else if (randomSFX == 1)
+            {
+                damageSFX1.pitch = UnityEngine.Random.Range(0.7f, 1f);
+                damageSFX1.Play();
+            }
+        }
+    }
+
+    private void ApplyHeal(float heal)
+    {
+        currentHealth += heal;
+        OnHeal?.Invoke(currentHealth);
+
+        overlayHandler.TriggerOverlayHealthRegen();
     }
 
     private void KillPlayer()
     {
         currentHealth = 0;
-        OnDamage(currentHealth);
 
         if (regeneratingHealth != null)
             StopCoroutine(regeneratingHealth);
 
-        gameOverScreen.SetActive(true);
-        this.gameObject.SetActive(false);
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        if(!killSwitch)
+        {
+            killSwitch = true;
+            StartCoroutine(GameOver());
+        }
     }
 
 
@@ -522,6 +683,7 @@ public class FirstPersonController : MonoBehaviour
             yield return null;
         }
 
+        isAiming = true;
         playerCamera.fieldOfView = targetFOV;
         zoomRoutine = null;
     }
@@ -535,6 +697,8 @@ public class FirstPersonController : MonoBehaviour
 
             while (currentHealth < maxHealth)
             {
+                overlayHandler.TriggerOverlayHealthRegen();
+
                 currentHealth += regenIncrementValue;
 
                 if (currentHealth > maxHealth)
@@ -553,6 +717,9 @@ public class FirstPersonController : MonoBehaviour
         yield return new WaitForSeconds (timeBeforeStaminaRegenStarts);
         WaitForSeconds timeToWait = new WaitForSeconds(staminaTimeIncrement);
 
+        if (hudEnabler.firstHUDEnable)
+            overlayHandler.TriggerStaminaRechargeAnimation();
+
         while (currentStamina < maxStamina)
         {
             if (currentStamina > 0)
@@ -569,5 +736,66 @@ public class FirstPersonController : MonoBehaviour
         }
 
         regeneratingStamina = null;
+    }
+
+    private IEnumerator SpotlightFlicker()
+    {
+        spotlight.GetComponent<LightFlicker>().flickerValueMin = 0.12f;
+        spotlight.GetComponent<LightFlicker>().flickerValueMax = 2.6f;
+        yield return new WaitForSeconds(.8f);
+        spotlight.GetComponent<LightFlicker>().flickerValueMin = spotlightIntensityBak;
+        spotlight.GetComponent<LightFlicker>().flickerValueMax = spotlightIntensityBak;
+    }
+
+    private IEnumerator RandomSpotlightFlicker()
+    {
+        int chance = UnityEngine.Random.Range(0, 4001);
+
+        if (currentHealth > (maxHealth/2))
+        {
+            if (chance > 3998)
+            {
+                StartCoroutine(SpotlightFlicker());
+            }
+        }
+        else if (currentHealth <= (maxHealth / 5))
+        {
+            if (chance > 3800)
+            {
+                StartCoroutine(SpotlightFlicker());
+            }
+        }
+        else if (currentHealth <= (maxHealth / 2))
+        {
+            if (chance > 3985)
+            {
+                StartCoroutine(SpotlightFlicker());
+            }
+        }
+
+
+        yield return null;
+    }
+
+    IEnumerator GameOver()
+    {
+        Cursor.lockState = CursorLockMode.None;
+
+        overlayHandler.TriggerScreenFadeIn();
+
+        yield return new WaitForSeconds(3);
+
+        gameOverScreen.SetActive(true);
+        Cursor.visible = true;
+        killSwitch = true;
+
+        GameManager.Instance.cubes = 0;
+
+
+        AudioManager.Instance.Stop("Nivel1");
+        AudioManager.Instance.Stop("AmbientTrack2");
+        AudioManager.Instance.Stop("SpaceStationAmbience");
+
+        this.gameObject.SetActive(false);
     }
 }

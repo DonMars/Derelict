@@ -169,7 +169,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1000
+      scalar: 440
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -3994,7 +3994,7 @@ ParticleSystem:
   TrailModule:
     enabled: 1
     mode: 1
-    ratio: 1
+    ratio: 0.36
     lifetime:
       serializedVersion: 2
       minMaxState: 0
@@ -4051,11 +4051,11 @@ ParticleSystem:
     minVertexDistance: 5.78
     textureMode: 0
     textureScale: {x: 1, y: 1}
-    ribbonCount: 37
+    ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
     dieWithParticles: 1
-    sizeAffectsWidth: 1
+    sizeAffectsWidth: 0
     sizeAffectsLifetime: 0
     inheritParticleColor: 1
     generateLightingData: 0

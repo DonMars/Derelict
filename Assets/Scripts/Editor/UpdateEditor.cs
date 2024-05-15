@@ -41,7 +41,7 @@ public class UpdateEditor : Editor
                     Space(3);
 
                     //Fire Rate
-                    _shopUpgrade.fireRateIncrease = EditorGUILayout.IntField("Fire Rate Increase", _shopUpgrade.fireRateIncrease);
+                    _shopUpgrade.fireRateIncrease = EditorGUILayout.FloatField("Fire Rate Increase", _shopUpgrade.fireRateIncrease);
                     
                     Space(3);
 

@@ -6,14 +6,20 @@ using TMPro;
 
 public class OptionsManager : MonoBehaviour
 {
+    [Header("Resolution")]
     [SerializeField] TMP_Dropdown resolutionDropdown;
     private Resolution[] resolutions;
     private List<Resolution> filteredResolutions;
     private float currentRefreshRate;
     private int currentResolutionIndex = 0;
 
+    [Header("HUD")]
+    TMP_Dropdown crosshairDropdown;
+
+    [Header("Audio")]
     public AudioMixer masterMixer;
 
+    [Header("References")]
     public GameObject pauseMenu;
     public GameObject optionsMenu;
 

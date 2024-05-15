@@ -14,10 +14,12 @@ public class PauseMenu : MonoBehaviour
     public GameObject viewControls;
     public GameObject viewStatus;
     public GameObject statusBackButton;
+    HUDEnabler hudEnabler;
 
     private void Start()
     {
         Time.timeScale = 1;
+        hudEnabler = FindObjectOfType<HUDEnabler>();
     }
 
     private void Update()
@@ -51,6 +53,8 @@ public class PauseMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
+             
+
             if (viewStatus.activeSelf)
             {
                 StatusUnpause();
@@ -84,6 +88,8 @@ public class PauseMenu : MonoBehaviour
         isPaused = false;
         pauseMenu.SetActive(false);
         Time.timeScale = 1;
+
+        //hudEnabler.TriggerHUDDisplay();
     }
 
     public void StatusPause()
@@ -110,6 +116,8 @@ public class PauseMenu : MonoBehaviour
         statusBackButton.SetActive(true);
         viewStatus.SetActive(false);
         Time.timeScale = 1;
+
+        //hudEnabler.TriggerHUDDisplay();
     }
 
     public void MainMenu()

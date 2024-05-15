@@ -9,6 +9,8 @@ public class GunController : MonoBehaviour
     [SerializeField] new Camera camera;
     public LayerMask rayCollisionMask;
 
+    KeyCode zoomKey = KeyCode.Mouse1;
+
     [Header("Fire Rate")]
     public float fireRate = 30f;
     public float nextTimeToFire = 0;
@@ -53,6 +55,8 @@ public class GunController : MonoBehaviour
     [Header("SFX")]
     [SerializeField] AudioSource laserShotSFX;
     [SerializeField] AudioSource laserShotSFX2;
+    public GameObject impactSFX1;
+    public GameObject impactSFX2;
 
 
     [Header("GFX")]
@@ -66,13 +70,34 @@ public class GunController : MonoBehaviour
     [SerializeField] GameObject floatingDamage;
     [SerializeField] GameObject floatingCriticalDamage;
 
+    [Header("UI FX")]
+    VFXOverlayHandler overlayHandler;
+    public Animator gunAnimator;
+    FirstPersonController playerController;
+    HUDEnabler hudEnabler;
+
+    public bool isAiming = false;
+
     private void Awake()
     {
         energyRechargeRateOriginal = energyRechargeRate;
+        overlayHandler = FindAnyObjectByType<VFXOverlayHandler>();
+        playerController = GetComponentInParent<FirstPersonController>();
+        hudEnabler = FindObjectOfType<HUDEnabler>();
     }
 
     private void Update()
     {
+        // Aiming Check
+        if (Input.GetKeyDown(zoomKey))
+        {
+            isAiming = true;
+        }
+        else if (Input.GetKeyUp(zoomKey))
+        {
+            isAiming = false;
+        }
+
         // Energy
         if (!isOvercharged)
             weaponEnergy -= energyRechargeRate * Time.deltaTime;
@@ -82,12 +107,22 @@ public class GunController : MonoBehaviour
         if (weaponEnergy >= weaponEnergyMax && !isOvercharged)
         {
             weaponEnergy = weaponEnergyMax;
+            if (hudEnabler.firstHUDEnable)
+            {
+                overlayHandler.TriggerWeaponOvercharge();
+            }
             isOvercharged = true;
         }
         else if (weaponEnergy <= 0)
             weaponEnergy = 0;
         else if (weaponEnergy <= energyUse)
+        {
+            if (hudEnabler.firstHUDEnable)
+            {
+                overlayHandler.TriggerWeaponIdle();
+            }
             isOvercharged = false;
+        }
 
         // Shooting
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && !isOvercharged && canShoot)
@@ -107,6 +142,23 @@ public class GunController : MonoBehaviour
         Instantiate(trailEffect, shootPoint.position, shootPoint.rotation);
         laserShotSFX.Play();
         laserShotSFX2.Play();
+        
+        if (hudEnabler.firstHUDEnable)
+        { 
+            overlayHandler.TriggerWeaponUse();
+        }
+
+        if (isAiming)
+        {
+            gunAnimator.ResetTrigger("aimingShotFired");
+            gunAnimator.SetTrigger("aimingShotFired");
+        }
+        else if (!isAiming)
+        {
+            gunAnimator.ResetTrigger("shotFired");
+            gunAnimator.SetTrigger("shotFired");
+        }
+        
 
         // Random Damage Control
         if (dealsRandomDamage)
@@ -121,7 +173,7 @@ public class GunController : MonoBehaviour
         {
             int chance = Random.Range(1, 101);
 
-            if (chance < criticalChance)
+            if (chance <= criticalChance)
             {
                 isDamageCritical = true;
 
@@ -174,6 +226,8 @@ public class GunController : MonoBehaviour
 
                     isDamageCritical = false;
                 }
+
+                Instantiate(impactSFX2, hit.point, Quaternion.LookRotation(hit.normal));
             }
 
             // Critical Damage Reset
@@ -191,12 +245,13 @@ public class GunController : MonoBehaviour
 
             // Force Apply
             if (hit.rigidbody != null && !hit.collider.isTrigger)
-                hit.rigidbody.AddForce(-hit.normal * impactForce * 20f);
+                hit.rigidbody.AddForce(-hit.normal * (impactForce/2), ForceMode.Impulse);
 
             // On-hit Effects
             Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                
-            if(leavesDecal && hit.collider.gameObject.isStatic)
+            Instantiate(impactSFX1, hit.point, Quaternion.LookRotation(hit.normal));
+
+            if (leavesDecal && hit.collider.gameObject.isStatic)
                 Instantiate(impactDecal, hit.point, Quaternion.LookRotation(hit.normal));
         }
     }
@@ -207,7 +262,19 @@ public class GunController : MonoBehaviour
         energyRechargeRate = overchargedEnergyRechargeRate;
         yield return new WaitForSeconds(overchargeDelay);
         isOvercharged = false;
+
+        if (hudEnabler.firstHUDEnable)
+        {
+            overlayHandler.TriggerWeaponRecharge();
+        }
+
         yield return new WaitUntil(() => weaponEnergy == 0);
+
+        if (hudEnabler.firstHUDEnable)
+        {
+            overlayHandler.TriggerWeaponIdle();
+        }
+
         energyRechargeRate = energyRechargeRateOriginal;
         canShoot = true;
     }

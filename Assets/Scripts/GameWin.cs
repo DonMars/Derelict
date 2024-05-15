@@ -12,8 +12,13 @@ public class GameWin : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        winScreen.SetActive(true);
         player.SetActive(false);
+
+        AudioManager.Instance.Stop("Nivel1");
+        AudioManager.Instance.Stop("AmbientTrack2");
+        AudioManager.Instance.Stop("SpaceStationAmbience");
+
+        winScreen.SetActive(true);
         winSong.Play();
     }
 }

@@ -16,8 +16,8 @@ MonoBehaviour:
   name: Life Xtend Micro
   description: Increases max health by 15
   icon: {fileID: 21300000, guid: 84dcb96e0b190ce45a03c43883648beb, type: 3}
-  cost: 150
-  purchased: 0
+  cost: 350
+  purchased: 1
   normalDamageIncrease: 0
   randomDamageMinIncrease: 0
   randomDamageMaxIncrease: 0

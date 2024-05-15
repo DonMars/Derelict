@@ -20,7 +20,7 @@ public class ShopUpgrade : UpgradeEffect
     public int randomDamageMinIncrease;
     public int randomDamageMaxIncrease;
     //Fire Rate
-    public int fireRateIncrease;
+    public float fireRateIncrease;
     //Critical Damage
     public int criticalChanceIncrease;
     public int criticalDamageIncrease;
@@ -99,7 +99,7 @@ public class ShopUpgrade : UpgradeEffect
         // If Critical Damage Update
         if (criticalChanceIncrease > 0)
         {
-            target.GetComponentInChildren<GunController>().criticalChance += criticalChanceIncrease;
+            target.GetComponentInChildren<GunController>().criticalChance += (criticalChanceIncrease);
         }
 
         if (criticalDamageIncrease > 0)
@@ -225,7 +225,7 @@ public class ShopUpgrade : UpgradeEffect
         }
         if (staminaUseReduction > 0)
         {
-            target.GetComponent<FirstPersonController>().staminaUseMultiplier -= staminaUseReduction;
+            target.GetComponent<FirstPersonController>().staminaUseMultiplier -= (staminaUseReduction * (target.GetComponent<FirstPersonController>().staminaUseMultiplier / 100));
         }
         if (timeBeforeStaminaRegenReduction > 0)
         {
@@ -245,6 +245,7 @@ public class ShopUpgrade : UpgradeEffect
         if (enableHealthRegen)
         {
             target.GetComponent<FirstPersonController>().canRegenerateHealth = true;
+            target.GetComponent<FirstPersonController>().RegenerateHealth();
         }
 
         //Dash Ability

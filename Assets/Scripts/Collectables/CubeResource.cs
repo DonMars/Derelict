@@ -11,11 +11,13 @@ public class CubeResource : MonoBehaviour
     [SerializeField] BoxCollider cubeCollider;
     GameObject cubeHUDIcon;
     Animator cubeHUDIconAnimator;
+    HUDEnabler hudEnabler;
 
     private void Awake()
     {
         cubeHUDIcon = GameObject.Find("CubeImage");
         cubeHUDIconAnimator = GameObject.Find("CubeImage").GetComponent<Animator>();
+        hudEnabler = FindObjectOfType<HUDEnabler>();
     }
 
     private void Start()
@@ -33,7 +35,15 @@ public class CubeResource : MonoBehaviour
 
         GameManager.Instance.cubes += CubeValue;
         AudioManager.Instance.Play("CubeCollectSfx");
-        cubeHUDIconAnimator.SetTrigger("cubeCollected");
+
+        if (GameManager.Instance.firstCube)
+            cubeHUDIconAnimator.SetTrigger("cubeCollected");
+        
+        if (!GameManager.Instance.firstCube)
+        {
+            GameManager.Instance.firstCube = true;
+            hudEnabler.TriggerCubeDisplay();
+        }
     }
 
     IEnumerator EnableCollider()

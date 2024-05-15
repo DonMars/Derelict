@@ -9,6 +9,7 @@ TagManager:
   - Footsteps/Wood
   - Enemy
   - InteractionOverlay
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - FPSView
   - Player
   - Wall
-  - 
+  - 3DGUI
   - 
   - 
   - 

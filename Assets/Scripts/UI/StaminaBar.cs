@@ -15,6 +15,7 @@ public class StaminaBar : MonoBehaviour
     [SerializeField] Animator hudStaminaIndicator;
     [SerializeField] float lowStamina;
     public Image frontStaminaBar;
+    public Image middleStaminaBar;
     public Image backStaminaBar;
     public float chipSpeed = 2f;
     private float maxStamina;
@@ -61,6 +62,7 @@ public class StaminaBar : MonoBehaviour
     private void UpdateStaminaUI()
     {
         float fillF = frontStaminaBar.fillAmount;
+        float fillM = middleStaminaBar.fillAmount;
         float fillB = backStaminaBar.fillAmount;
         float sFraction = currentStamina / maxStamina;
 
@@ -69,7 +71,8 @@ public class StaminaBar : MonoBehaviour
             frontStaminaBar.fillAmount = sFraction;
             backStaminaBar.color = backBarColor;
             lerpTimer += Time.deltaTime;
-            backStaminaBar.fillAmount = Mathf.Lerp(fillB, sFraction, lerpMultiplier);
+            backStaminaBar.fillAmount = Mathf.Lerp(fillB, sFraction, lerpMultiplier*2);
+            middleStaminaBar.fillAmount = Mathf.Lerp(fillM, sFraction, lerpMultiplier);
         }
 
         if (fillF < sFraction)

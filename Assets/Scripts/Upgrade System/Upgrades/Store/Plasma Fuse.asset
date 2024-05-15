@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eecc4e898bdb49409ca45ef4f98c004, type: 3}
+  m_Name: Plasma Fuse
+  m_EditorClassIdentifier: 
+  type: 0
+  name: Plasma Fuse
+  description: Decreases the overcharge cooldown on your weapon by 2 seconds.
+  icon: {fileID: 0}
+  cost: 1200
+  purchased: 0
+  normalDamageIncrease: 0
+  randomDamageMinIncrease: 0
+  randomDamageMaxIncrease: 0
+  fireRateIncrease: 0
+  criticalChanceIncrease: 0
+  criticalDamageIncrease: 0
+  makeCriticalDamageMultiplicative: 0
+  makeCriticalDamageRandom: 0
+  criticalDamageRandomMinIncrease: 0
+  criticalDamageRandomMaxIncrease: 0
+  weaponEnergyMaxIncrease: 0
+  weaponEnergyUseDecrease: 0
+  weaponEnergyRechargeRateIncrease: 0
+  weaponEnergyOverchargedRechargeRateIncrease: 0
+  weaponOverchargeDelayDecrease: 2
+  maxHealthIncrease: 0
+  timeBeforeRegenDecrease: 0
+  regenIncrementValueIncrease: 0
+  regenIncrementTimeDecrease: 0
+  baseStepIncrease: 0
+  walkSpeedIncrease: 0
+  walkBobSpeedIncrease: 0
+  sprintSpeedIncrease: 0
+  sprintBobSpeedIncrease: 0
+  crouchSpeedIncrease: 0
+  crouchBobSpeedIncrease: 0
+  allSpeedIncrease: 0
+  allBobSpeedIncrease: 0
+  maxStaminaIncrease: 0
+  staminaUseReduction: 0
+  timeBeforeStaminaRegenReduction: 0
+  timeBeforeDepletedStaminaRegenReduction: 0
+  staminaRegenValueIncrease: 0
+  enableHealthRegen: 0
+  enableDashAbility: 0
+  enableCriticalDamage: 0

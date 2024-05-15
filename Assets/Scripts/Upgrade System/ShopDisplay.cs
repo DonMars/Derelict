@@ -8,6 +8,9 @@ using Unity.VisualScripting;
 public class ShopDisplay : MonoBehaviour
 {
     public ShopUpgrade displayedUpgrade;
+    public UpdateChange updateDisplay;
+    public GameObject shopElementsToHide;
+    bool shopDisplaySwitch = false;
 
     public string displayedName;
     public string displayedDescription;
@@ -21,28 +24,14 @@ public class ShopDisplay : MonoBehaviour
     public TextMeshProUGUI costUI;
     public TextMeshProUGUI typeUI;
 
-    void Start()
-    {
-        displayedName = displayedUpgrade.name;
-        displayedDescription = displayedUpgrade.description;
-        displayedIcon = displayedUpgrade.icon;
-        displayedCost = displayedUpgrade.cost;
-        displayedType = displayedUpgrade.type.ToString();
-
-        nameUI.text = displayedName;
-        descriptionUI.text = displayedDescription;
-        iconUI.sprite = displayedIcon;
-        costUI.text = displayedCost.ToString();
-        typeUI.text = displayedType;
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void Display()
     {
+        if (!shopDisplaySwitch)
+        {
+            shopElementsToHide.SetActive(true);
+            shopDisplaySwitch = true;
+        }
+
         displayedName = displayedUpgrade.name;
         displayedDescription = displayedUpgrade.description;
         displayedIcon = displayedUpgrade.icon;

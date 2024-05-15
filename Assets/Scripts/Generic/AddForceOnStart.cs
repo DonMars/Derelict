@@ -13,6 +13,6 @@ public class AddForceOnStart : MonoBehaviour
     void Start()
     {
         GetComponent<Rigidbody>().AddForce(Random.Range(horizontalRangeMin, horizontalRangeMax),
-            Random.Range(verticalRangeMin, verticalRangeMax),Random.Range(horizontalRangeMin, horizontalRangeMax), forceMode);
+        Random.Range(verticalRangeMin, verticalRangeMax),Random.Range(horizontalRangeMin, horizontalRangeMax), forceMode);
     }
 }

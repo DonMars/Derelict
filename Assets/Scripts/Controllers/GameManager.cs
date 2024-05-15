@@ -9,9 +9,12 @@ public class GameManager : MonoBehaviour
     public int cubes;
 
     // Scripted Events
+    public bool firstPlaythrough = false;
     public bool firstDoor = false;
     public bool firstContainer = false;
     public bool firstVendingMachine = false;
+    public bool firstCube = false;
+    public bool firstPause = false;
 
     void Awake()
     {
@@ -29,5 +32,10 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void TriggerHUDDisplay()
+    {
+
     }
 }

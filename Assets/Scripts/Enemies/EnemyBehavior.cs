@@ -6,6 +6,15 @@ using UnityEngine.AI;
 public class EnemyBehavior : MonoBehaviour
 {
     public Animator spybotAnimator;
+    public GameObject explosionVFX;
+    public AudioSource hitSFX1;
+    public AudioSource hitSFX2;
+    public AudioSource hitSFX3;
+
+    [Header("Initialization")]
+    public float randomSpeedMin;
+    public float randomSpeedMax;
+
 
     [Header("Detection")]
     public float detectionRadius = 5;
@@ -42,9 +51,10 @@ public class EnemyBehavior : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         enemyHealth = GetComponent<EnemyHealth>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        agent.speed = Random.Range(randomSpeedMin, randomSpeedMax);
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Player Detect
@@ -82,6 +92,8 @@ public class EnemyBehavior : MonoBehaviour
         {
             aware = true;
         }
+
+
     }
 
     bool RandomPoint(Vector3 center, float range, out Vector3 result)
@@ -105,6 +117,12 @@ public class EnemyBehavior : MonoBehaviour
         patrolSwitch = false;
     }
 
+
+    public void InstantiateExplosion()
+    {
+        Instantiate(explosionVFX.gameObject, transform.position, Quaternion.identity);
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if(other.CompareTag("Enemy") && enemyCall && !calledSwitch)
@@ -122,6 +140,24 @@ public class EnemyBehavior : MonoBehaviour
 
             if (chance == 1)
             {
+                int chance2 = Random.Range(1, 4);
+
+                if (chance2 == 1)
+                {
+                    hitSFX1.pitch = Random.Range(0.9f, 1.2f);
+                    hitSFX1.Play();
+                }
+                else if (chance2 == 2)
+                {
+                    hitSFX2.pitch = Random.Range(0.9f, 1.2f);
+                    hitSFX2.Play();
+                }
+                else if (chance2 == 3)
+                {
+                    hitSFX3.pitch = Random.Range(0.8f, 1.1f);
+                    hitSFX3.Play();
+                }
+
                 collisionDamage = Random.Range(collisionDamageMin, collisionDamageMax+1);
                 FirstPersonController.OnTakeDamage(collisionDamage);
             }
